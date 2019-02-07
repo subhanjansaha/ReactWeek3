@@ -1,10 +1,25 @@
 import React from "react";
-import {View, Button, Text, ScrollView} from 'react-native'
+import {View, Button, Text, ScrollView, StyleSheet, Switch} from 'react-native'
+import {Constants} from 'expo'
 
 let id = 0;
 
+const styles = StyleSheet.create({
+  todoContainer: {
+    flexDirection: 'row', 
+    alignItems: 'center',
+  }, 
+  appContainer:{
+    marginTop: Constants.statusBarHeight,
+  },
+  fill: {
+    flex: 1,
+  }
+})
+
 const Todo = props => (
-  <View style={{}}>
+  <View style={styles.todoContainer}>
+    <Switch value={props.todo.checked} onValueChange={props.onCheck}/>
     <Button onPress={props.onDelete} title='delete'/>
     <Text>{props.todo.text}</Text>
   </View>
@@ -46,14 +61,14 @@ export default class App extends React.Component {
   }
   render() {
     return (
-      <View>
+      <View style={[styles.appContainer, styles.fill]}>
         <Text>Todo count: {this.state.todos.length}</Text>
         <Text>
           Unchecked todo count:{" "}
           {this.state.todos.filter(todo => !todo.checked).length}
         </Text>
         <Button onPress={() => this.addTodo()} title='Add TODO'/>
-        <ScrollView>
+        <ScrollView style={styles.fill}>
           {this.state.todos.map(todo => (
             <Todo
               onCheck={() => this.toggleTodo(todo.id)}
