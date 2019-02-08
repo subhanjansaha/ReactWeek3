@@ -8,26 +8,20 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center', 
     justifyContent: 'center',
+    padding: 50,
+  },
+  emptyContainer: {
+    flex: 1,
+    padding: 50,
+    alignItems: 'center',
   },
   countStyle: {
     fontSize: 50,
   },
 })
 
-class Counter extends React.Component {
 
-  shouldComponentUpdate(nextProps) {
-    return !(nextProps.count % 2)
-  }
-
-  render() {
-    return(
-      <Text style={styles.countStyle}>{this.props.count}</Text>
-    )
-  }
-}
-
-export default class App extends React.Component {
+class CounterClass extends React.Component {
   
   constructor() {
     super();
@@ -37,7 +31,11 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    setInterval(this.inc ,1000)
+    this.interval = setInterval(this.inc ,1000)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval)
   }
 
   inc = () => {
@@ -49,8 +47,40 @@ export default class App extends React.Component {
   render() {
     return (
       <View style={styles.appContainer}>
-        <Counter count={this.state.count} />
+        <Text style={styles.countStyle}> {this.state.count} </Text>
       </View>
     );
+  }
+}
+
+export default class App extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      isShowingCounter: true,
+    }
+  }
+
+  toggleShowCounter = () => {
+    this.setState(prevState => ({
+      isShowingCounter: !prevState.isShowingCounter,
+    }))
+  }
+  
+  render() {
+    if (this.state.isShowingCounter) {
+      return(
+      <View style={styles.appContainer}>
+        <Button title="toggle" onPress={this.toggleShowCounter} />
+        <CounterClass />
+      </View>
+      )
+    } else {
+      return(
+        <View style={styles.emptyContainer}>
+          <Button title="toggle" onPress={this.toggleShowCounter} />
+        </View>
+      )
+    }
   }
 }
