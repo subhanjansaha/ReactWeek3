@@ -14,6 +14,19 @@ const styles = StyleSheet.create({
   },
 })
 
+class Counter extends React.Component {
+
+  shouldComponentUpdate(nextProps) {
+    return !(nextProps.count % 2)
+  }
+
+  render() {
+    return(
+      <Text style={styles.countStyle}>{this.props.count}</Text>
+    )
+  }
+}
+
 export default class App extends React.Component {
   
   constructor() {
@@ -36,7 +49,7 @@ export default class App extends React.Component {
   render() {
     return (
       <View style={styles.appContainer}>
-        <Text style={styles.countStyle}>{this.state.count}</Text>
+        <Counter count={this.state.count} />
       </View>
     );
   }
